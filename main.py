@@ -1,12 +1,13 @@
 import os
 from bottle import (get, post, redirect, request, route, run, static_file,
-                template, TEMPLATE_PATH)
+                    template, TEMPLATE_PATH)
 import utils
 import json
 
 TEMPLATE_PATH.insert(0, os.path.dirname(__file__))
 
 # Static Routes
+
 
 @get("/js/<filepath:re:.*\.js>")
 def js(filepath):
@@ -41,5 +42,14 @@ def search():
     sectionTemplate = "./templates/search.tpl"
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData = {})
 
+@route("/ajax/show/<id:int>")
+def showShow(id):
+    data = utils.getJsonFromFile(id)
+    data = json.loads(data)
+    sectionTemplate = "./templates/show.tpl"
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate,
+                    sectionData=data)
 
-run(host='localhost', port=os.environ.get('PORT', 5000), reloader= True)
+
+
+run(host='0.0.0.0', port=os.environ.get('PORT', 5000), reloader=True)
