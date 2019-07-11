@@ -62,7 +62,7 @@ def showEpisode(showId, epId):
     data = utils.getJsonFromFile(showId)
     data = json.loads(data)["_embedded"]["episodes"]
     for episode in data:
-        if episode["id"] is epId:
+        if episode["id"] == epId:
             data = episode
     sectionTemplate = "./templates/episode.tpl"
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate,
