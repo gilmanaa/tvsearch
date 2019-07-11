@@ -1,9 +1,21 @@
 import os
-from bottle import (get, post, redirect, request, route, run, static_file,
-                    template)
+from bottle import (get, post, redirect, request, route, run, static_file,template)
 import utils
+import json
 
 # Static Routes
+@route('/search')
+def search_page():
+    sectionTemplate = os.path.dirname(__file__) + "/templates/search.tpl"
+    return template(os.path.dirname(__file__) + "/pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
+
+@route('/browse')
+def browse_page():
+    data = utils.getJsonFromFile("7")
+    data1 = json.loads(data)
+    dataArr = [data1]
+    sectionTemplate = os.path.dirname(__file__) + "/templates/browse.tpl"
+    return template(os.path.dirname(__file__) + "/pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData=dataArr)
 
 @get("/js/<filepath:re:.*\.js>")
 def js(filepath):
@@ -19,7 +31,7 @@ def img(filepath):
 
 @route('/')
 def index():
-    sectionTemplate = "./templates/home.tpl"
-    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData = {})
+    sectionTemplate = os.path.dirname(__file__) + "/templates/home.tpl"
+    return template(os.path.dirname(__file__) + "/pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData = {})
 
-run(host='0.0.0.0', port=os.environ.get('PORT', 5000))
+run(host='localhost', port=os.environ.get('PORT', 5000))
