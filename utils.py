@@ -1,5 +1,7 @@
-from bottle import template
+from bottle import template, TEMPLATE_PATH
 import json
+import os
+
 
 JSON_FOLDER = './data'
 AVAILABE_SHOWS = ["7", "66", "73", "82", "112", "143", "175", "216", "1371", "1871","2993", "305"]

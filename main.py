@@ -1,8 +1,10 @@
 import os
 from bottle import (get, post, redirect, request, route, run, static_file,
-                    template)
+                template, TEMPLATE_PATH)
 import utils
 import json
+
+TEMPLATE_PATH.insert(0, os.path.dirname(__file__))
 
 # Static Routes
 
@@ -40,4 +42,4 @@ def search():
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData = {})
 
 
-run(host='0.0.0.0', port=os.environ.get('PORT', 5000))
+run(host='localhost', port=os.environ.get('PORT', 5000), reloader= True)
