@@ -42,6 +42,13 @@ def search():
     sectionTemplate = "./templates/search.tpl"
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData = {})
 
+@route("/search",method="POST")
+def search_shows():
+    q = request.POST.get("q")
+    search_results = utils.search_shows(q)
+    sectionTemplate = "./templates/search_result.tpl"
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData = {}, results=search_results, query=q)
+
 @route("/ajax/show/<id:int>")
 def showShow(id):
     data = utils.getJsonFromFile(id)
@@ -52,4 +59,4 @@ def showShow(id):
 
 
 
-run(host='0.0.0.0', port=os.environ.get('PORT', 5000), reloader=True)
+run(host='localhost', port=os.environ.get('PORT', 5000), reloader=True)
