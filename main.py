@@ -57,6 +57,15 @@ def showShow(id):
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate,
                     sectionData=data)
 
-
+@route("/ajax/show/<showId:int>/episode/<epId:int>")
+def showEpisode(showId, epId):
+    data = utils.getJsonFromFile(showId)
+    data = json.loads(data)["_embedded"]["episodes"]
+    for episode in data:
+        if episode["id"] is epId:
+            data = episode
+    sectionTemplate = "./templates/episode.tpl"
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate,
+                    sectionData=data)
 
 run(host='localhost', port=os.environ.get('PORT', 5000), reloader=True)
