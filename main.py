@@ -50,26 +50,33 @@ def search_shows():
 
 @route("/ajax/show/<id:int>")
 def showShow(id):
-    data = utils.getJsonFromFile(id)
-    if len(data) == 2:
+    if utils.show_shows(id) == "error":
         return redirect('/error')
-    data = json.loads(data)
-    sectionTemplate = "./templates/show.tpl"
-    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate,
-                    sectionData=data)
+    template_string = utils.show_shows(id)
+    template_slice = template_string.split('<section id="dynamic">')[1]
+    template_slice = template_slice.split("</section>")[0]
+    return template_slice
+
+@route("/show/<id:int>")
+def showShow(id):
+    if utils.show_shows(id) == "error":
+        return redirect('/error')
+    return utils.show_shows(id)
 
 @route("/ajax/show/<showId:int>/episode/<epId:int>")
 def showEpisode(showId, epId):
-    ep = None
-    data = utils.getJsonFromFile(showId)
-    data = json.loads(data)["_embedded"]["episodes"]
-    for episode in data:
-        if episode["id"] == epId:
-            ep = episode
-            sectionTemplate = "./templates/episode.tpl"
-            return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate,
-                            sectionData=ep)
-    return redirect('/error')
+    if utils.show_episodes(showId, epId) == "error":
+        return redirect('/error')
+    template_string = utils.show_episodes(showId, epId)
+    template_slice = template_string.split('<section id="dynamic">')[1]
+    template_slice = template_slice.split("</section>")[0]
+    return template_slice
+
+@route("/show/<showId:int>/episode/<epId:int>")
+def showEpisode(showId, epId):
+    if utils.show_episodes(showId, epId) == "error":
+        return redirect('/error')
+    return utils.show_episodes(showId, epId)
 
 @route('/error')
 def errors():

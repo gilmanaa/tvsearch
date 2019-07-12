@@ -1,6 +1,5 @@
-from bottle import template, TEMPLATE_PATH
+from bottle import template, redirect
 import json
-import os
 
 
 JSON_FOLDER = './data'
@@ -28,3 +27,23 @@ def search_shows(q):
             elif q in str(episode['summary']):
                 results.append({'showid':cont['id'],'episodeid':episode['id'],'text':cont['name'] + ": " + episode['name']})
     return results
+
+def show_shows(id):
+    data = getJsonFromFile(id)
+    if len(data) == 2:
+        return "error"
+    data = json.loads(data)
+    sectionTemplate = "./templates/show.tpl"
+    return template("./pages/index.html", version=getVersion(), sectionTemplate=sectionTemplate,
+                    sectionData=data)
+
+def show_episodes(showId, epId):
+    data = getJsonFromFile(showId)
+    data = json.loads(data)["_embedded"]["episodes"]
+    for episode in data:
+        if episode["id"] == epId:
+            ep = episode
+            sectionTemplate = "./templates/episode.tpl"
+            return template("./pages/index.html", version=getVersion(), sectionTemplate=sectionTemplate,
+                            sectionData=ep)
+    return "error"
