@@ -48,7 +48,7 @@ def search_shows():
     sectionTemplate = "./templates/search_result.tpl"
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData = {}, results=search_results, query=q)
 
-@route("/ajax/show/<id:int>")
+@route("/ajax/show/<id>")
 def showShow(id):
     if utils.show_shows(id) == "error":
         return redirect('/error')
@@ -57,13 +57,14 @@ def showShow(id):
     template_slice = template_slice.split("</section>")[0]
     return template_slice
 
-@route("/show/<id:int>")
+@route("/show/<id>")
 def showShow(id):
-    if utils.show_shows(id) == "error":
+    show = utils.show_shows(id)
+    if show == "error":
         return redirect('/error')
-    return utils.show_shows(id)
+    return show
 
-@route("/ajax/show/<showId:int>/episode/<epId:int>")
+@route("/ajax/show/<showId>/episode/<epId>")
 def showEpisode(showId, epId):
     if utils.show_episodes(showId, epId) == "error":
         return redirect('/error')
@@ -72,11 +73,12 @@ def showEpisode(showId, epId):
     template_slice = template_slice.split("</section>")[0]
     return template_slice
 
-@route("/show/<showId:int>/episode/<epId:int>")
+@route("/show/<showId>/episode/<epId>")
 def showEpisode(showId, epId):
-    if utils.show_episodes(showId, epId) == "error":
+    episode = utils.show_episodes(showId, epId)
+    if episode == "error":
         return redirect('/error')
-    return utils.show_episodes(showId, epId)
+    return episode
 
 @route('/error')
 def errors():
